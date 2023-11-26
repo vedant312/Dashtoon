@@ -22,78 +22,87 @@
 
 // Chakra imports
 import { Box, Grid, GridItem, SimpleGrid } from "@chakra-ui/react";
+import ImageCard from "components/card/ImageCard";
 
 // Custom components
 import StripAction from "components/strip/StripAction";
 import StripPromt from "components/strip/StripPromt";
 import { useState } from "react";
 
-const bearerToken = process.env.YOUR_BEARER_TOKEN;
-
 export default function EditorHome() {
 	const [isFetching, setIsFetching] = useState(false);
 	const [prompts, setPrompts] = useState<string[]>([]);
-	const [images, setImage] = useState<Blob[]>([]);
+	const [images, setImages] = useState<Blob[]>([]);
 	const [configurations, setConfigurations] = useState({
 		showCaption: true,
 		imageperrow: 3,
 	});
 
-	const query = async (prompt: string) => {
+	const handleChangePrompts = (newPrompts: string[]) => {
+		setPrompts(newPrompts);
+	};
+
+	const query = async (prompt: string, index: number) => {
+		const bearerToken = process.env.REACT_APP_API_KEY;
 		try {
 			const response = await fetch(
 				"https://xdwvg9no7pefghrn.us-east-1.aws.endpoints.huggingface.cloud",
 				{
 					headers: {
-						"Accept": "image/png",
-						"Authorization": "Bearer ${bearerToken}",
+						Accept: "image/png",
+						Authorization: `Bearer ${bearerToken}`,
 						"Content-Type": "application/json",
 					},
 					method: "POST",
 					body: JSON.stringify({ inputs: prompt }),
-				}
+				},
 			);
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
 			}
-			return await response.blob();
+			const imgblob = await response.blob();
+			setImages((prev) => {
+				prev[index] = imgblob;
+				return prev;
+			});
+			return true;
 		} catch (error) {
-			console.error("Error fetching image:", error);
-			return null;
+			console.error("Error fetching image:", error, prompt);
+			return false;
 		}
-	};
-
-	const handleContentChange = (e: React.SyntheticEvent) => { };
-
-	const handleChangePrompts = (newPrompts: string[]) => {
-		setPrompts(newPrompts);
 	};
 
 	const handleShootPrompts = async () => {
 		setIsFetching(true);
-		const imagePromises = prompts.map(prompt =>
-			query(prompt).catch(error => {
-				console.error(`Error with prompt "${prompt}":`, error);
-				return null;
-			})
-		);
+		// resize images to size of prompts
+		while (prompts.length > images.length) {
+			images.push(null);
+		}
 
-		const fetchedImages = await Promise.all(imagePromises);
-		const validImages = fetchedImages.filter(blob => blob !== null) as Blob[];
+		// fetch images async
+		const imagePromises = prompts.map((prompt, index) => query(prompt, index));
+		await Promise.all(imagePromises);
 
-		setImage(validImages);
+		// set isFetching to false
 		setIsFetching(false);
 	};
 
-	// render fetched images
-	const renderImages = images.map((blob, index) => (
-		<img key={index} src={URL.createObjectURL(blob)} alt={`Generated image ${index}`} />
-	));
-
 	return (
 		<Box pt={{ base: "130px", md: "80px", xl: "80px" }}>
-			<SimpleGrid columns={{ base: 1, md: 1, xl: 1 }} gap="20px" mb="20px">
-				{/* <EditorArea handleContentChange={handleContentChange} /> */}
+			<SimpleGrid
+				columns={{ base: 1, md: 2, xl: configurations.imageperrow }}
+				gap="20px"
+				mb="20px"
+			>
+				{images.map((blob, index) => (
+					<ImageCard
+						key={index}
+						blob={blob}
+						prompt={prompts[index]}
+						showCaption={configurations.showCaption}
+						imageperrow={configurations.imageperrow}
+					/>
+				))}
 			</SimpleGrid>
 			<Box display={isFetching ? "none" : "block"}>
 				<Grid templateColumns="repeat(5, 1fr)" gap="20px" mb="20px">

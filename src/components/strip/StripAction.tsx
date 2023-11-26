@@ -97,7 +97,7 @@ export default function Default(props: {
 						<Select
 							placeholder="Select option"
 							size="sm"
-							value={3}
+							defaultValue={3}
 							onChange={(e) => {
 								setConfigurations((prev) => ({
 									...prev,
