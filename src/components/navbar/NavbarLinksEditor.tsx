@@ -14,10 +14,9 @@ import {
 	Link
 } from '@chakra-ui/react';
 // Custom Components
-import { ItemContent } from 'components/navbar/ItemContent';
+
 import PropTypes from 'prop-types';
 // Assets
-import { MdNotificationsNone } from 'react-icons/md';
 import { IoLogoGithub, IoMdMoon, IoMdSunny } from 'react-icons/io';
 export default function HeaderLinks(props: { secondary: boolean }) {
 	const { secondary } = props;
@@ -26,7 +25,6 @@ export default function HeaderLinks(props: { secondary: boolean }) {
 	const navbarIcon = useColorModeValue('gray.400', 'white');
 	let menuBg = useColorModeValue('white', 'navy.800');
 	const textColor = useColorModeValue('secondaryGray.900', 'white');
-	const textColorBrand = useColorModeValue('brand.700', 'brand.400');
 	const borderColor = useColorModeValue('#E6ECFA', 'rgba(135, 140, 189, 0.3)');
 	const shadow = useColorModeValue(
 		'14px 17px 40px 4px rgba(112, 144, 176, 0.18)',
