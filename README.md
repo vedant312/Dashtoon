@@ -8,7 +8,7 @@ The application was made as a recruitment Assingment for Dashtoon.
 
 ## Deployment
 
-Deployed on gh-pages. Available at [https:/comicstrip.vedantdangi.me/](https:/comicstrip.vedantdangi.me/)
+Deployed on gh-pages. Available at [https://comicstrip.vedantdangi.me/](https://comicstrip.vedantdangi.me/)
 
 ## Configurations
 
