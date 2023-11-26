@@ -45,14 +45,13 @@ export default function EditorHome() {
 	const toast = useToast();
 
 	const query = async (prompt: string, index: number) => {
-		const bearerToken = process.env.REACT_APP_API_KEY;
 		try {
 			const response = await fetch(
 				"https://xdwvg9no7pefghrn.us-east-1.aws.endpoints.huggingface.cloud",
 				{
 					headers: {
 						Accept: "image/png",
-						Authorization: "",
+						Authorization: "Bearer VknySbLLTUjbxXAXCjyfaFIPwUTCeRXbFSOjwRiCxsxFyhbnGjSFalPKrpvvDAaPVzWEevPljilLVDBiTzfIbWFdxOkYJxnOPoHhkkVGzAknaOulWggusSFewzpqsNWM",
 						"Content-Type": "application/json",
 					},
 					method: "POST",
