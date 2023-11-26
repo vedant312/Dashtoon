@@ -1,0 +1,3 @@
+User-Agent: *
+Disallow:
+Sitemap: https://ed-eater.harshitraj.xyz

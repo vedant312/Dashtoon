@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "typeRoots": ["node_modules/@types", "src/types", "cypress/types"],
+    "types": ["cypress", "node"],
+    "target": "es2016",
+    "lib": ["dom", "dom.iterable", "esnext", "es2015.iterable", "es5"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": false,
+    "downlevelIteration": true,
+    "baseUrl": "src",
+    "paths": {
+      "@assets/*": ["./src/assetsassets/*"]
+    },
+  },
+  "include": [
+    "./src"
+  ], 
+}
