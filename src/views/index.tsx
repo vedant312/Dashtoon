@@ -21,7 +21,7 @@
 */
 
 // Chakra imports
-import { Box, Grid, GridItem, SimpleGrid } from "@chakra-ui/react";
+import { Box, Grid, GridItem, SimpleGrid, useToast } from "@chakra-ui/react";
 import ImageCard from "components/card/ImageCard";
 
 // Custom components
@@ -42,6 +42,8 @@ export default function EditorHome() {
 		setPrompts(newPrompts);
 	};
 
+	const toast = useToast();
+
 	const query = async (prompt: string, index: number) => {
 		const bearerToken = process.env.REACT_APP_API_KEY;
 		try {
@@ -50,7 +52,7 @@ export default function EditorHome() {
 				{
 					headers: {
 						Accept: "image/png",
-						Authorization: `Bearer ${bearerToken}`,
+						Authorization: "",
 						"Content-Type": "application/json",
 					},
 					method: "POST",
@@ -58,7 +60,16 @@ export default function EditorHome() {
 				},
 			);
 			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
+				toast({
+					title: "Error fetching image.",
+					description: `HTTP error! status: ${response.status}`,
+					status: "error",
+					duration: 9000,
+					isClosable: true,
+				});
+				setIsFetching(false);
+				setImages([]);
+				return null;
 			}
 			const imgblob = await response.blob();
 			setImages((prev) => {
@@ -67,6 +78,15 @@ export default function EditorHome() {
 			});
 			return true;
 		} catch (error) {
+			toast({
+				title: "An error occurred.",
+				description: "There was an error fetching the image.",
+				status: "error",
+				duration: 9000,
+				isClosable: true,
+			});
+			setIsFetching(false);
+			setImages([]);
 			console.error("Error fetching image:", error, prompt);
 			return false;
 		}
@@ -74,16 +94,19 @@ export default function EditorHome() {
 
 	const handleShootPrompts = async () => {
 		setIsFetching(true);
-		// resize images to size of prompts
-		while (prompts.length > images.length) {
-			images.push(null);
-		}
+		setImages(() => {
+			const newImages = [];
+			while (newImages.length < prompts.length) {
+				newImages.push(null);
+			}
+			return newImages;
+		});
 
-		// fetch images async
+
 		const imagePromises = prompts.map((prompt, index) => query(prompt, index));
 		await Promise.all(imagePromises);
 
-		// set isFetching to false
+
 		setIsFetching(false);
 	};
 
