@@ -2,7 +2,7 @@
 
 ## About Application
 
-The application was made as a recruitment Assingment for Dashtoon.
+The application was made as a recruitment assignment for Dashtoon.
 
 **Clients**: Whoever wants to
 
@@ -17,6 +17,6 @@ This app uses hugging face API. API KEY can be filled by setting the value of RE
 ## Author
 
 - [Vedant Dangi](https://vedantdangi.me)
-- Roll: 21101
+- Roll: 201101
 - Email: vedantd20@iitk.ac.in
 - IIT Kanpur
